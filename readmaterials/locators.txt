@@ -1,0 +1,80 @@
+Playwright promotes user-facing locators that reflect accessibility trees and user intent rather than brittle DOM structures (like long XPath or nested CSS paths).
+
+
+
+Locator Method	Primary Use Case	Syntax Example
+
+
+
+
+
+
+page.getByRole()	Target semantic elements (buttons, links, headings)	page.getByRole('button', { name: 'Submit' })
+
+
+page.getByLabel()	Target form inputs connected to a <label>	page.getByLabel('Email address')
+
+page.getByPlaceholder()	Target inputs showing placeholder text	page.getByPlaceholder('Search products...')
+
+page.getByText()	Find non-interactive text elements	page.getByText('Welcome back, Admin')
+
+page.getByTestId()	Target custom data-testid attributes	page.getByTestId('checkout-button') 
+
+page.locator()	Fallback CSS or XPath selectors	page.locator('div.item-card > a')
+
+
+
+• click(): click(): Clicks an element after confirming visibility, stability, and enablement.
+
+
+• fill(): fill(): Instantly clears existing text and sets the new value in an input.
+
+• pressSequentially(): pressSequentially(): Types character-by-character; ideal for auto-suggest/autocomplete search fields.
+
+• check() / uncheck(): check() / uncheck(): Toggles checkboxes and radio buttons.
+
+• selectOption(): selectOption(): Selects options inside HTML <select> dropdowns by value, label, or index.
+
+
+• hover(): hover(): Moves mouse cursor over an element to reveal tooltips or dropdown menus.
+
+
+5.1 Auto-Wait Mechanism
+Before executing any action, Playwright performs actionability checks on the target element. If the element is not ready, Playwright retries until the actionability conditions pass or the action timeout (default: 30s) expires.
+
+1. Attached: Attached to the DOM tree.
+
+2. Visible: Visible (non-zero bounding box, not hidden or display:none).
+
+3. Stable: Stable (not transitioning or animating).
+
+4. Enabled: Enabled (does not have a disabled attribute).
+
+5. Editable/Clickable: Receives Events (not covered by modal overlays or spinners).
+
+
+5.2 Explicit vs. Implicit Waits
+Comparing implicit (built-in) and explicit wait strategies:
+• Built-In Waits: Implicit / Auto-Waits: Built into all locators and web-first assertions. Highly recommended for 95% of test scenarios.
+
+• Explicit Waits: Explicit Waits: Used when waiting for non-standard events such as a URL transition, a network request, or a specific DOM state change.
+
+• Anti-Pattern: Anti-Pattern: `page.waitForTimeout(5000)` (Hardcoded sleep). It slows down pipelines and leads to flaky tests across CI environments.
+
+
+5.4 Assertions using expect()
+
+Playwright provides Web-First Assertions via the `expect` function. Web-first assertions poll the DOM until the expected condition is fulfilled.
+Assertion Syntax	Condition Evaluated	Retry Behavior
+
+await expect(loc).toBeVisible()	Element is visible in viewport	Retries automatically up to timeout
+
+await expect(loc).toHaveText('X')	Element text exactly matches X	Retries automatically up to timeout
+
+await expect(loc).toContainText('X')	Element text contains substring X	Retries automatically up to timeout
+
+await expect(loc).toHaveValue('val')	Input field value equals val	Retries automatically up to timeout
+
+await expect(page).toHaveTitle('Title')	Document title matches Title	Retries automatically up to timeout
+
+expect(count).toBe(5)	Generic synchronous assertion	Evaluated instantly (NO retry)
