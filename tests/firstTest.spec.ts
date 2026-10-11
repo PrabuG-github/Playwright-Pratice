@@ -75,7 +75,6 @@ test('test', async ({ page }) => {
 
   const count = 5 //fetching values from DB
 
- await  expect(count).tob
 
  await page.dragAndDrop("#drop","#draggable");
 

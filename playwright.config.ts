@@ -37,6 +37,8 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'on',
     headless: false,
+    viewport:null,
+    video:'on'
     
     
   },
@@ -46,9 +48,13 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'],
+        
         launchOptions:{
-          //slowMo:5000,
-        }
+          slowMo:5000,
+          args : ["--start-maximized"],
+        },
+        deviceScaleFactor:undefined,
+        viewport:null
       },
       
     },
