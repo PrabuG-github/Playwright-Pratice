@@ -1,4 +1,4 @@
-import {test,expect} from "@playwright/test";
+import {test,expect} from "../fixtures/firstFixture.ts";
 
 test("My first test Case",async({page})=>{
     
@@ -80,5 +80,9 @@ test('test', async ({ page }) => {
 
 
 
-
 });
+
+test("using fixture",async({loginemail})=>
+{
+  console.log(`${loginemail}`);
+})
