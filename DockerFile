@@ -1,0 +1,17 @@
+# Official Microsoft Playwright image matching your Playwright version
+FROM --platform=arm64 mcr.microsoft.com/playwright:v1.64.0-noble
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency manifests first to leverage Docker layer caching
+COPY package*.json ./
+
+# Install dependencies (use npm ci for clean, reproducible installs)
+RUN npm ci
+
+# Copy the rest of the project files
+COPY . .
+
+# Run Playwright tests by default
+CMD ["npx", "playwright", "test"]
